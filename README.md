@@ -4,7 +4,7 @@ Benchmark program showcasing how compiler optimizations of today greatly improve
 
 Because GCC is exceptionally good at optimizing C code, the flags you use to compile this will heavily impact the results.
 
-Without C optimization
+Without C optimization (`-O0`)
 ```bash
 Allocating array of 100000000 elements...
 Running benchmarks...
@@ -15,7 +15,7 @@ Running benchmarks...
 Difference: Assembly was 307.03% faster than C.
 ```
 
-## With C optmization
+### With C optmization (`-O3`)
 ```bash
 Allocating array of 100000000 elements...
 Running benchmarks...
