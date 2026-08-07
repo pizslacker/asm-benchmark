@@ -4,6 +4,8 @@ Benchmark program showcasing how compiler optimizations of today greatly improve
 
 Because GCC is exceptionally good at optimizing C code, the flags you use to compile this will heavily impact the results.
 
+This C program uses GCC inline assembly for x86_64 architecture. It compares a standard C implementation of an array-summation function against a handwritten assembly version, using POSIX high-resolution timers (`clock_gettime`) to measure the performance of both.
+
 ### Without C optimization (`-O0`)
 ```bash
 Allocating array of 100000000 elements...
