@@ -4,7 +4,7 @@ Benchmark program showcasing how compiler optimizations of today greatly improve
 
 Because GCC is exceptionally good at optimizing C code, the flags you use to compile this will heavily impact the results.
 
-Without C optimization (`-O0`)
+### Without C optimization (`-O0`)
 ```bash
 Allocating array of 100000000 elements...
 Running benchmarks...
