@@ -1,6 +1,6 @@
 # assy-benchmark
 
-Benchmark program showcasing how compiler optimizations of today greatly improves C performance, compared to theolden days of handwriting assembly (ASM).
+C benchmark program showcasing how compiler optimizations of today greatly improves C performance, compared to theolden days of handwriting assembly (ASM).
 
 Because GCC is exceptionally good at optimizing C code, the flags you use to compile this will heavily impact the results.
 
