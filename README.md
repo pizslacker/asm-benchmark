@@ -27,3 +27,5 @@ Running benchmarks...
 
 Difference: Assembly was 23.13% slower than C.
 ```
+
+At `-O3`, the tables often turn. GCC will "unroll" the C loop and automatically utilize SIMD (Single Instruction, Multiple Data) or AVX vector instructions on modern CPUs. It will process 2, 4, or even 8 integers simultaneously, completely outperforming our naive scalar assembly loop.
