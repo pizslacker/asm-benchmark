@@ -1,4 +1,4 @@
-# assy-benchmark
+# ASM-benchmark
 
 C benchmark program showcasing how compiler optimizations of today greatly improves C performance, compared to _the olden days_ of handwritten assembly (ASM).
 
