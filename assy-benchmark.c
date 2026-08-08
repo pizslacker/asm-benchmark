@@ -4,7 +4,7 @@
 #include <pthread.h>
 #include <unistd.h>
 
-#define ARRAY_SIZE 1000000000 // 1 billion elements. 
+#define ARRAY_SIZE 1000000000
 // Modern CPUs chew through 100 million simple additions in a fraction of a second.
 
 // Atomic flag to control the spinner loop
