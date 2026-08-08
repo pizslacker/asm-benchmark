@@ -6,6 +6,8 @@ Because GCC is exceptionally good at optimizing C code, the flags you use to com
 
 This C program uses GCC inline assembly for `x86_64` architecture. It compares a standard C implementation of an array-summation function against a handwritten assembly version, using `POSIX` high-resolution timers (`clock_gettime`) to measure the performance of both.
 
+`Pthread` is utilized to animate a spinning pipe indicator while running functions.
+
 ### Without C optimization (`-O0`)
 ```bash
 Allocating array of 100000000 elements...
