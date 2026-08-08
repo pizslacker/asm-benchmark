@@ -1,8 +1,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <pthread.h>
+#include <unistd.h>
 
-#define ARRAY_SIZE 100000000 // 100 million elements
+#define ARRAY_SIZE 1000000000 // 1 billion elements
+
+// Atomic flag to control the spinner loop
+volatile int keep_spinning = 1;
+
+// ---------------------------------------------------------
+// Spinner Thread Function
+// ---------------------------------------------------------
+void *spinner_thread(void *arg) {
+    const char spinner[] = "|/-\\";
+    int i = 0;
+    
+    while (keep_spinning) {
+        // Print current character and backspace the cursor
+        printf("%c\b", spinner[i++ % 4]);
+        fflush(stdout);
+        usleep(100000); // 100ms delay
+    }
+    
+    // Clear the spinner character when stopping
+    printf(" \b");
+    return NULL;
+}
 
 // ---------------------------------------------------------
 // 1. Standard C Implementation
@@ -21,22 +45,17 @@ long long sum_c(const long long *arr, size_t size) {
 long long sum_asm(long long *arr, size_t size) {
     long long sum = 0;
     
-    // __volatile__ prevents the compiler from optimizing the assembly block away
     __asm__ __volatile__ (
-        "test %[size], %[size]\n\t"  // Check if size is 0
-        "jz 2f\n"                    // If zero, jump forward to label '2'
-        "1:\n\t"                     // Loop start (label '1')
-        "add (%[arr]), %[sum]\n\t"   // Add the value at pointer [arr] to [sum]
-        "add $8, %[arr]\n\t"         // Move pointer forward by 8 bytes (sizeof long long)
-        "dec %[size]\n\t"            // Decrement the size counter
-        "jnz 1b\n"                   // If size is not zero, jump back to label '1'
-        "2:"                         // End label
-        
-        // Output operands (using '+' because we read and write to them)
+        "test %[size], %[size]\n\t"
+        "jz 2f\n"
+        "1:\n\t"
+        "add (%[arr]), %[sum]\n\t"
+        "add $8, %[arr]\n\t"
+        "dec %[size]\n\t"
+        "jnz 1b\n"
+        "2:"
         : [sum] "+r" (sum), [arr] "+r" (arr), [size] "+r" (size)
-        // Input operands (none, since we used '+' above)
         : 
-        // Clobbered registers ('cc' means we modify the condition codes/flags)
         : "cc"
     );
     
@@ -58,16 +77,21 @@ int main() {
         return 1;
     }
 
-    // Populate array with dummy data
     for (size_t i = 0; i < ARRAY_SIZE; i++) {
-        arr[i] = 1; // Keeping it simple to prevent overflow
+        arr[i] = 1;
     }
 
     struct timespec start, end;
     long long result_c, result_asm;
     double time_c, time_asm;
 
-    printf("Running benchmarks...\n\n");
+    // Modified to keep the cursor on the same line for the spinner
+    printf("Running benchmarks... ");
+    fflush(stdout);
+
+    // Start the spinner in a background thread
+    pthread_t spinner;
+    pthread_create(&spinner, NULL, spinner_thread, NULL);
 
     // --- Benchmark C Version ---
     clock_gettime(CLOCK_MONOTONIC, &start);
@@ -75,7 +99,6 @@ int main() {
     clock_gettime(CLOCK_MONOTONIC, &end);
     
     time_c = get_time_diff(start, end);
-    printf("[C Version]       Result: %lld | Time: %.6f seconds\n", result_c, time_c);
 
     // --- Benchmark Assembly Version ---
     clock_gettime(CLOCK_MONOTONIC, &start);
@@ -83,9 +106,15 @@ int main() {
     clock_gettime(CLOCK_MONOTONIC, &end);
     
     time_asm = get_time_diff(start, end);
+
+    // Stop the spinner thread
+    keep_spinning = 0;
+    pthread_join(spinner, NULL);
+    printf("\n\n"); // Print the newlines originally requested
+
+    printf("[C Version]       Result: %lld | Time: %.6f seconds\n", result_c, time_c);
     printf("[Assembly Version] Result: %lld | Time: %.6f seconds\n", result_asm, time_asm);
 
-    // --- Comparison ---
     printf("\nDifference: Assembly was %.2f%% %s than C.\n", 
            (time_c > time_asm) ? ((time_c / time_asm - 1) * 100) : ((time_asm / time_c - 1) * 100),
            (time_c > time_asm) ? "faster" : "slower");
