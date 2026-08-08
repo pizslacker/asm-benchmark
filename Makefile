@@ -1,6 +1,6 @@
-assy-benchmark: assy-benchmark.c
-	gcc -O3 -o assy-benchmark assy-benchmark.c
-	strip assy-benchmark
+asm-benchmark: asm-benchmark.c
+	gcc -O3 -o asm-benchmark asm-benchmark.c
+	strip asm-benchmark
 
 clean:
-	rm -f assy-benchmark
+	rm -f asm-benchmark
