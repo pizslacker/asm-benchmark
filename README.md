@@ -2,6 +2,8 @@
 
 C benchmark program showcasing how compiler optimizations of today greatly improves C performance, compared to _the olden days_ of handwritten assembly (ASM).
 
+    C code that allocates a 1-billion element array, runs a single-threaded benchmark comparing a standard C loop to inline x86_64 assembly, and shows a spinner animation. However, the assembly modifies the input pointer and size values directly in-place during the first run, meaning the second run receives a zeroed size.
+
 Because GCC is exceptionally good at optimizing C code, the flags you use to compile this will heavily impact the results.
 
 This C program uses GCC inline assembly for `x86_64` architecture. It compares a standard C implementation of an array-summation function against a handwritten assembly version, using `POSIX` high-resolution timers (`clock_gettime`) to measure the performance of both.
