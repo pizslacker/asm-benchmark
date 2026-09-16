@@ -3,6 +3,7 @@
   > "If you can read assembly, then everything is open source." --Programmer Joke
 
 C benchmark program showcasing how compiler optimizations of today greatly improves C performance, compared to _the olden days_ of handwritten `assembly` (`ASM`).
+
 It allocates a 1-billion element array, runs a single-threaded benchmark comparing a standard C loop to inline x86_64 assembly, and shows a spinner animation.
 
 Because GCC is exceptionally good at optimizing C code, the flags you use to compile this will heavily impact the results.
